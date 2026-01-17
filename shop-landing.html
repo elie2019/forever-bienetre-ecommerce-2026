@@ -1469,6 +1469,25 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        /* ==================== DESKTOP HOVER BEHAVIOR ==================== */
+        @media (min-width: 769px) {
+            /* Ouverture automatique au survol sur desktop */
+            .nav-links .fittrack-dropdown:hover .fittrack-submenu {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            .nav-links .fittrack-dropdown:hover .fittrack-toggle svg {
+                transform: rotate(180deg);
+            }
+
+            .nav-links .fittrack-dropdown:hover .fittrack-toggle::after {
+                width: 100%;
+            }
+        }
+
         .fittrack-submenu::before {
             content: '';
             position: absolute;
@@ -1600,31 +1619,31 @@
                             </svg>
                         </button>
                         <div class="fittrack-submenu">
-                            <a href="http://localhost/foreverbienetre/fittrack-pricing">
+                            <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-pricing">
                                 <span>📋</span>
                                 <span>Pricing & Plans</span>
                             </a>
-                            <a href="http://localhost/foreverbienetre/fittrack-dashboard">
+                            <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-dashboard">
                                 <span>📊</span>
                                 <span>Dashboard</span>
                             </a>
-                            <a href="http://localhost/foreverbienetre/fittrack-nutrition">
+                            <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-nutrition">
                                 <span>🥗</span>
                                 <span>Nutrition Tracker</span>
                             </a>
-                            <a href="http://localhost/foreverbienetre/fittrack-workouts">
+                            <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-workouts">
                                 <span>🏋️</span>
                                 <span>Workout Logger</span>
                             </a>
-                            <a href="http://localhost/foreverbienetre/fittrack-progress">
+                            <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-progress">
                                 <span>📈</span>
                                 <span>Progress Tracking</span>
                             </a>
-                            <a href="http://localhost/foreverbienetre/fittrack-goals">
+                            <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-goals">
                                 <span>🎯</span>
                                 <span>Goals Manager</span>
                             </a>
-                            <a href="http://localhost/foreverbienetre/fittrack-settings">
+                            <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-settings">
                                 <span>⚙️</span>
                                 <span>Settings</span>
                             </a>
@@ -1671,31 +1690,31 @@
                     </svg>
                 </button>
                 <div class="fittrack-submenu">
-                    <a href="http://localhost/foreverbienetre/fittrack-pricing">
+                    <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-pricing">
                         <span>📋</span>
                         <span>Pricing & Plans</span>
                     </a>
-                    <a href="http://localhost/foreverbienetre/fittrack-dashboard">
+                    <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-dashboard">
                         <span>📊</span>
                         <span>Dashboard</span>
                     </a>
-                    <a href="http://localhost/foreverbienetre/fittrack-nutrition">
+                    <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-nutrition">
                         <span>🥗</span>
                         <span>Nutrition Tracker</span>
                     </a>
-                    <a href="http://localhost/foreverbienetre/fittrack-workouts">
+                    <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-workouts">
                         <span>🏋️</span>
                         <span>Workout Logger</span>
                     </a>
-                    <a href="http://localhost/foreverbienetre/fittrack-progress">
+                    <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-progress">
                         <span>📈</span>
                         <span>Progress Tracking</span>
                     </a>
-                    <a href="http://localhost/foreverbienetre/fittrack-goals">
+                    <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-goals">
                         <span>🎯</span>
                         <span>Goals Manager</span>
                     </a>
-                    <a href="http://localhost/foreverbienetre/fittrack-settings">
+                    <a href="http://localhost/foreverbienetre/wp-content/themes/forever-be-wp-premium/shop-landing.html#fittrack-settings">
                         <span>⚙️</span>
                         <span>Settings</span>
                     </a>
@@ -2482,34 +2501,49 @@
 
         // ==================== FITTRACK DROPDOWN ====================
         const fittrackToggle = document.getElementById('fittrackToggle');
-        const fittrackDropdown = document.querySelector('.fittrack-dropdown');
+        const fittrackDropdown = document.querySelector('.nav-links .fittrack-dropdown');
 
         if (fittrackToggle && fittrackDropdown) {
-            // Toggle dropdown on click
+            // Desktop (>768px): Hover uniquement, pas de click
+            // Mobile (≤768px): Click pour ouvrir/fermer
+
+            // Fonction pour vérifier si on est sur mobile
+            function isMobile() {
+                return window.innerWidth <= 768;
+            }
+
+            // Sur desktop, empêcher le comportement click du bouton
             fittrackToggle.addEventListener('click', function(e) {
+                if (!isMobile()) {
+                    e.preventDefault(); // Juste empêcher l'action par défaut, le hover CSS gère l'ouverture
+                    return;
+                }
+                // Sur mobile, toggle le dropdown
                 e.preventDefault();
                 e.stopPropagation();
                 fittrackDropdown.classList.toggle('active');
             });
 
-            // Close dropdown when clicking outside
+            // Close dropdown when clicking outside (mobile uniquement)
             document.addEventListener('click', function(e) {
-                if (!fittrackDropdown.contains(e.target)) {
+                if (isMobile() && !fittrackDropdown.contains(e.target)) {
                     fittrackDropdown.classList.remove('active');
                 }
             });
 
-            // Close dropdown when clicking submenu link
+            // Close dropdown when clicking submenu link (mobile uniquement)
             const submenuLinks = fittrackDropdown.querySelectorAll('.fittrack-submenu a');
             submenuLinks.forEach(link => {
                 link.addEventListener('click', function() {
-                    fittrackDropdown.classList.remove('active');
+                    if (isMobile()) {
+                        fittrackDropdown.classList.remove('active');
+                    }
                 });
             });
 
-            // Close dropdown on ESC key
+            // Close dropdown on ESC key (mobile uniquement)
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && fittrackDropdown.classList.contains('active')) {
+                if (e.key === 'Escape' && isMobile() && fittrackDropdown.classList.contains('active')) {
                     fittrackDropdown.classList.remove('active');
                 }
             });
