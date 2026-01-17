@@ -117,17 +117,49 @@ $plans = $stripe->get_plans();
     </div>
 </div>
 
+<!-- Ensure jQuery is loaded -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Stripe.js -->
 <script src="https://js.stripe.com/v3/"></script>
+
 <script>
-const stripe = Stripe('<?php echo $stripe->get_publishable_key(); ?>');
+// FitTrack Data Configuration
+const fittrackData = {
+    ajaxUrl: '<?php echo admin_url('admin-ajax.php'); ?>',
+    nonce: '<?php echo wp_create_nonce('fittrack_nonce'); ?>',
+    isLoggedIn: <?php echo is_user_logged_in() ? 'true' : 'false'; ?>,
+    userId: <?php echo get_current_user_id(); ?>
+};
+
+// Initialize Stripe
+const stripePublishableKey = '<?php echo esc_js($stripe->get_publishable_key()); ?>';
+if (!stripePublishableKey) {
+    console.error('Stripe publishable key not configured. Please add FITTRACK_STRIPE_PUBLISHABLE_KEY to wp-config.php');
+}
+const stripe = stripePublishableKey ? Stripe(stripePublishableKey) : null;
 
 function subscribeToPlan(plan) {
+    // Check if user is logged in
     if (!fittrackData.isLoggedIn) {
         alert('Please log in to subscribe');
-        window.location.href = '/wp-login.php';
+        window.location.href = '<?php echo wp_login_url(get_permalink()); ?>';
         return;
     }
 
+    // Check if Stripe is initialized
+    if (!stripe) {
+        alert('Payment system not configured. Please contact support.');
+        return;
+    }
+
+    // Show loading state
+    const button = event.target;
+    const originalText = button.textContent;
+    button.textContent = 'Processing...';
+    button.disabled = true;
+
+    // Create checkout session
     jQuery.ajax({
         url: fittrackData.ajaxUrl,
         type: 'POST',
@@ -138,13 +170,26 @@ function subscribeToPlan(plan) {
         },
         success: function(response) {
             if (response.success) {
-                stripe.redirectToCheckout({ sessionId: response.data.sessionId });
+                // Redirect to Stripe Checkout
+                stripe.redirectToCheckout({ sessionId: response.data.sessionId })
+                    .then(function(result) {
+                        if (result.error) {
+                            alert('Error: ' + result.error.message);
+                            button.textContent = originalText;
+                            button.disabled = false;
+                        }
+                    });
             } else {
-                alert('Error: ' + response.data.message);
+                alert('Error: ' + (response.data.message || 'An error occurred'));
+                button.textContent = originalText;
+                button.disabled = false;
             }
         },
-        error: function() {
-            alert('An error occurred. Please try again.');
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', error, xhr.responseText);
+            alert('An error occurred. Please try again. Check console for details.');
+            button.textContent = originalText;
+            button.disabled = false;
         }
     });
 }

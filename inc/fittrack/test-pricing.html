@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack Pricing - Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+
+<div class="fittrack-pricing min-h-screen bg-gradient-to-b from-gray-50 to-white py-12">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-900 mb-4">Choose Your Plan - TEST</h1>
+            <p class="text-xl text-gray-600">Testing button functionality</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <!-- Pro Plan -->
+            <div class="bg-white rounded-2xl shadow-2xl p-8 border-4 border-teal-500">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Pro</h3>
+                    <div class="text-4xl font-bold text-teal-600">
+                        €9.99
+                        <span class="text-lg font-normal text-gray-500">/month</span>
+                    </div>
+                </div>
+                <button onclick="testButton('pro')" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                    Test Pro Button
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <div id="test-results" class="bg-white rounded-lg shadow p-6 max-w-2xl mx-auto">
+                <h3 class="font-bold text-lg mb-4">Test Results:</h3>
+                <div id="log" class="text-left space-y-2 font-mono text-sm"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+// Test configuration
+const fittrackData = {
+    ajaxUrl: '/wp-admin/admin-ajax.php',
+    nonce: 'test_nonce_123',
+    isLoggedIn: false, // Simulate logged out user
+    userId: 0
+};
+
+function log(message, type = 'info') {
+    const logDiv = document.getElementById('log');
+    const color = type === 'error' ? 'text-red-600' : type === 'success' ? 'text-green-600' : 'text-blue-600';
+    logDiv.innerHTML += `<div class="${color}">✓ ${message}</div>`;
+}
+
+function testButton(plan) {
+    log('Button clicked! Plan: ' + plan, 'success');
+
+    if (!fittrackData.isLoggedIn) {
+        log('User not logged in - Would redirect to login', 'info');
+        alert('Please log in to subscribe (TEST MODE)');
+        return;
+    }
+
+    log('Would create Stripe checkout session for: ' + plan, 'info');
+}
+
+// Test on load
+window.onload = function() {
+    log('Page loaded successfully');
+    log('jQuery version: ' + jQuery.fn.jquery);
+    log('fittrackData.ajaxUrl: ' + fittrackData.ajaxUrl);
+    log('fittrackData.isLoggedIn: ' + fittrackData.isLoggedIn);
+    log('Click the "Test Pro Button" to test functionality', 'success');
+};
+</script>
+
+</body>
+</html>
