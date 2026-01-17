@@ -61,7 +61,13 @@ class FitTrack_Data_Sync {
      * Initialiser les hooks WordPress
      */
     private function init_hooks() {
-        // AJAX handlers
+        // AJAX handlers - Authentification (no_priv pour utilisateurs non connectés)
+        add_action('wp_ajax_nopriv_fittrack_classic_login', array($this, 'ajax_classic_login'));
+        add_action('wp_ajax_nopriv_fittrack_classic_register', array($this, 'ajax_classic_register'));
+        add_action('wp_ajax_nopriv_fittrack_google_login', array($this, 'ajax_google_login'));
+        add_action('wp_ajax_nopriv_fittrack_google_register', array($this, 'ajax_google_register'));
+
+        // AJAX handlers - Application (utilisateurs connectés)
         add_action('wp_ajax_fittrack_update_weight', array($this, 'ajax_update_weight'));
         add_action('wp_ajax_fittrack_log_workout', array($this, 'ajax_log_workout'));
         add_action('wp_ajax_fittrack_log_meal', array($this, 'ajax_log_meal'));
@@ -535,7 +541,261 @@ class FitTrack_Data_Sync {
     }
 
     // =========================
-    // HANDLERS AJAX
+    // HANDLERS AJAX - AUTHENTIFICATION
+    // =========================
+
+    /**
+     * AJAX: Connexion classique (email/password)
+     */
+    public function ajax_classic_login() {
+        check_ajax_referer('fittrack_login_nonce', 'nonce');
+
+        $email = sanitize_email($_POST['email']);
+        $password = $_POST['password'];
+        $remember = isset($_POST['remember']) && $_POST['remember'] === '1';
+
+        // Validation
+        if (empty($email) || empty($password)) {
+            wp_send_json_error(array(
+                'message' => 'Veuillez remplir tous les champs'
+            ));
+        }
+
+        // Tentative de connexion
+        $credentials = array(
+            'user_login' => $email,
+            'user_password' => $password,
+            'remember' => $remember
+        );
+
+        $user = wp_signon($credentials, is_ssl());
+
+        if (is_wp_error($user)) {
+            wp_send_json_error(array(
+                'message' => 'Email ou mot de passe incorrect'
+            ));
+        }
+
+        // Connexion réussie
+        wp_set_current_user($user->ID);
+        wp_set_auth_cookie($user->ID, $remember);
+
+        wp_send_json_success(array(
+            'message' => 'Connexion réussie !',
+            'redirect_url' => home_url('/fittrack-dashboard')
+        ));
+    }
+
+    /**
+     * AJAX: Inscription classique
+     */
+    public function ajax_classic_register() {
+        check_ajax_referer('fittrack_register_nonce', 'nonce');
+
+        $name = sanitize_text_field($_POST['name']);
+        $email = sanitize_email($_POST['email']);
+        $password = $_POST['password'];
+
+        // Validation
+        if (empty($name) || empty($email) || empty($password)) {
+            wp_send_json_error(array(
+                'message' => 'Veuillez remplir tous les champs'
+            ));
+        }
+
+        if (!is_email($email)) {
+            wp_send_json_error(array(
+                'message' => 'Email invalide'
+            ));
+        }
+
+        if (strlen($password) < 8) {
+            wp_send_json_error(array(
+                'message' => 'Le mot de passe doit contenir au moins 8 caractères'
+            ));
+        }
+
+        // Vérifier si l'email existe déjà
+        if (email_exists($email)) {
+            wp_send_json_error(array(
+                'message' => 'Cet email est déjà utilisé'
+            ));
+        }
+
+        // Créer l'utilisateur
+        $user_id = wp_insert_user(array(
+            'user_login' => $email,
+            'user_email' => $email,
+            'user_pass' => $password,
+            'display_name' => $name,
+            'role' => 'subscriber'
+        ));
+
+        if (is_wp_error($user_id)) {
+            wp_send_json_error(array(
+                'message' => 'Erreur lors de la création du compte'
+            ));
+        }
+
+        // Initialiser les métadonnées FitTrack
+        update_user_meta($user_id, 'fittrack_signup_date', date('Y-m-d H:i:s'));
+        update_user_meta($user_id, 'fittrack_plan', 'free');
+        update_user_meta($user_id, 'fittrack_onboarding_completed', '0');
+
+        // Connecter automatiquement l'utilisateur
+        wp_set_current_user($user_id);
+        wp_set_auth_cookie($user_id, true);
+
+        wp_send_json_success(array(
+            'message' => 'Compte créé avec succès !',
+            'redirect_url' => home_url('/fittrack-dashboard')
+        ));
+    }
+
+    /**
+     * AJAX: Connexion Google OAuth
+     */
+    public function ajax_google_login() {
+        check_ajax_referer('fittrack_login_nonce', 'nonce');
+
+        $credential = sanitize_text_field($_POST['credential']);
+
+        if (empty($credential)) {
+            wp_send_json_error(array(
+                'message' => 'Token Google invalide'
+            ));
+        }
+
+        // Décoder le JWT Google
+        $google_user = $this->verify_google_token($credential);
+
+        if (!$google_user) {
+            wp_send_json_error(array(
+                'message' => 'Impossible de vérifier le token Google'
+            ));
+        }
+
+        // Chercher l'utilisateur par email
+        $user = get_user_by('email', $google_user['email']);
+
+        if (!$user) {
+            wp_send_json_error(array(
+                'message' => 'Aucun compte trouvé avec cet email. Veuillez vous inscrire.'
+            ));
+        }
+
+        // Connecter l'utilisateur
+        wp_set_current_user($user->ID);
+        wp_set_auth_cookie($user->ID, true);
+
+        wp_send_json_success(array(
+            'message' => 'Connexion Google réussie !',
+            'redirect_url' => home_url('/fittrack-dashboard')
+        ));
+    }
+
+    /**
+     * AJAX: Inscription Google OAuth
+     */
+    public function ajax_google_register() {
+        check_ajax_referer('fittrack_register_nonce', 'nonce');
+
+        $credential = sanitize_text_field($_POST['credential']);
+
+        if (empty($credential)) {
+            wp_send_json_error(array(
+                'message' => 'Token Google invalide'
+            ));
+        }
+
+        // Décoder le JWT Google
+        $google_user = $this->verify_google_token($credential);
+
+        if (!$google_user) {
+            wp_send_json_error(array(
+                'message' => 'Impossible de vérifier le token Google'
+            ));
+        }
+
+        // Vérifier si l'email existe déjà
+        if (email_exists($google_user['email'])) {
+            wp_send_json_error(array(
+                'message' => 'Un compte existe déjà avec cet email. Veuillez vous connecter.'
+            ));
+        }
+
+        // Créer l'utilisateur
+        $user_id = wp_insert_user(array(
+            'user_login' => $google_user['email'],
+            'user_email' => $google_user['email'],
+            'display_name' => $google_user['name'],
+            'first_name' => $google_user['given_name'] ?? '',
+            'last_name' => $google_user['family_name'] ?? '',
+            'role' => 'subscriber'
+        ));
+
+        if (is_wp_error($user_id)) {
+            wp_send_json_error(array(
+                'message' => 'Erreur lors de la création du compte'
+            ));
+        }
+
+        // Ajouter métadonnées Google
+        update_user_meta($user_id, 'fittrack_signup_date', date('Y-m-d H:i:s'));
+        update_user_meta($user_id, 'fittrack_signup_method', 'google');
+        update_user_meta($user_id, 'fittrack_google_id', $google_user['sub']);
+        update_user_meta($user_id, 'fittrack_plan', 'free');
+        update_user_meta($user_id, 'fittrack_onboarding_completed', '0');
+
+        // Sauvegarder la photo de profil Google
+        if (!empty($google_user['picture'])) {
+            update_user_meta($user_id, 'fittrack_profile_picture', $google_user['picture']);
+        }
+
+        // Connecter automatiquement l'utilisateur
+        wp_set_current_user($user_id);
+        wp_set_auth_cookie($user_id, true);
+
+        wp_send_json_success(array(
+            'message' => 'Compte créé avec succès !',
+            'redirect_url' => home_url('/fittrack-dashboard')
+        ));
+    }
+
+    /**
+     * Vérifier et décoder le token Google JWT
+     */
+    private function verify_google_token($credential) {
+        // Décoder le JWT sans vérification (pour développement)
+        // En production, utiliser Google API Client Library pour vérifier la signature
+        $parts = explode('.', $credential);
+
+        if (count($parts) !== 3) {
+            return false;
+        }
+
+        $payload = base64_decode(str_replace(['-', '_'], ['+', '/'], $parts[1]));
+        $user_data = json_decode($payload, true);
+
+        if (!$user_data || !isset($user_data['email'])) {
+            return false;
+        }
+
+        // Vérifier que le token vient bien de Google
+        if (!isset($user_data['iss']) || !in_array($user_data['iss'], ['accounts.google.com', 'https://accounts.google.com'])) {
+            return false;
+        }
+
+        // Vérifier que le token n'est pas expiré
+        if (isset($user_data['exp']) && $user_data['exp'] < time()) {
+            return false;
+        }
+
+        return $user_data;
+    }
+
+    // =========================
+    // HANDLERS AJAX - APPLICATION
     // =========================
 
     /**

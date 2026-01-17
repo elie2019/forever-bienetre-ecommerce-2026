@@ -247,6 +247,8 @@ class FitTrack_Pro {
         $page_slug = get_query_var('pagename');
 
         $fittrack_pages = array(
+            'fittrack-login',
+            'fittrack-register',
             'fittrack-dashboard',
             'fittrack-nutrition',
             'fittrack-workouts',
@@ -278,6 +280,8 @@ class FitTrack_Pro {
         }
 
         $fittrack_pages = array(
+            'fittrack-login',
+            'fittrack-register',
             'fittrack-dashboard',
             'fittrack-nutrition',
             'fittrack-workouts',

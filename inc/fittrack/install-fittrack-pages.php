@@ -29,6 +29,20 @@ if (!current_user_can('manage_options')) {
  */
 $fittrack_pages = array(
     array(
+        'title' => 'FitTrack Login',
+        'slug' => 'fittrack-login',
+        'template' => 'page-fittrack-login.php',
+        'content' => 'Page de connexion FitTrack Pro avec Google OAuth.',
+        'parent' => 0
+    ),
+    array(
+        'title' => 'FitTrack Register',
+        'slug' => 'fittrack-register',
+        'template' => 'page-fittrack-register.php',
+        'content' => 'Page d\'inscription FitTrack Pro avec Google OAuth.',
+        'parent' => 0
+    ),
+    array(
         'title' => 'FitTrack Pricing',
         'slug' => 'fittrack-pricing',
         'template' => 'page-fittrack-pricing.php',
