@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutique Premium - Forever Bien-Etre</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #c9a962;
+            --accent-light: #e8d5a3;
+            --text: #333333;
+            --text-light: #666666;
+            --white: #ffffff;
+            --bg-light: #f8f7f4;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        /* Hero Section with Parallax */
+        .hero {
+            height: 100vh;
+            min-height: 700px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            z-index: -2;
+        }
+
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background-image:
+                radial-gradient(circle at 20% 80%, rgba(201, 169, 98, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(201, 169, 98, 0.08) 0%, transparent 50%);
+            z-index: -1;
+            will-change: transform;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+            max-width: 900px;
+            z-index: 1;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.3s;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.7s;
+        }
+
+        .hero-cta {
+            display: inline-block;
+            padding: 16px 50px;
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 0;
+            transition: var(--transition);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.9s;
+        }
+
+        .hero-cta:hover {
+            background: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201, 169, 98, 0.3);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--white);
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Section Styles */
+        section {
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--primary);
+        }
+
+        /* Parallax Divider */
+        .parallax-divider {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .parallax-bg {
+            position: absolute;
+            top: -50%;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            will-change: transform;
+        }
+
+        .parallax-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.85) 0%, rgba(22, 33, 62, 0.9) 100%);
+        }
+
+        .parallax-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        .parallax-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-style: italic;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+
+        /* Products Section */
+        .products-section {
+            padding: 120px 5%;
+            background: var(--bg-light);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        /* Product Card */
+        .product-card {
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .product-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .product-card:hover {
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px);
+        }
+
+        .product-image-wrapper {
+            position: relative;
+            padding-top: 120%;
+            overflow: hidden;
+        }
+
+        .product-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.08);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--accent);
+            color: var(--primary);
+            padding: 6px 14px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .product-info {
+            padding: 30px;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .product-description {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .product-price span {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-buy {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-buy:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        .btn-buy svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-buy:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 120px 5%;
+            background: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-light);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .feature-item:hover .feature-icon {
+            background: var(--accent);
+        }
+
+        .feature-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: var(--primary);
+            transition: var(--transition);
+        }
+
+        .feature-item:hover .feature-icon svg {
+            stroke: var(--white);
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .feature-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Newsletter Section */
+        .newsletter-section {
+            padding: 100px 5%;
+            background: var(--primary);
+            text-align: center;
+        }
+
+        .newsletter-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-title {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            color: var(--white);
+            margin-bottom: 15px;
+        }
+
+        .newsletter-text {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 640px) {
+            .newsletter-form {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 18px 25px;
+            border: none;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+        }
+
+        .newsletter-btn {
+            padding: 18px 35px;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .newsletter-btn:hover {
+            background: var(--accent-light);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 5% 30px;
+            background: var(--secondary);
+            color: var(--white);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-15px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-8px);
+            }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 50px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+        }
+
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            background: var(--bg-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: var(--accent);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .modal-text {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .modal-btn {
+            display: inline-block;
+            padding: 14px 40px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Loading State */
+        .btn-buy.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .btn-buy.loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-pattern" id="heroPattern"></div>
+        <div class="hero-content">
+            <span class="hero-subtitle">Collection Premium</span>
+            <h1 class="hero-title">L'Excellence du Bien-Etre</h1>
+            <p class="hero-description">
+                Decouvrez notre selection exclusive de produits haut de gamme,
+                soigneusement choisis pour sublimer votre quotidien.
+            </p>
+            <a href="#products" class="hero-cta">Explorer la Collection</a>
+        </div>
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Parallax Divider 1 -->
+    <div class="parallax-divider">
+        <div class="parallax-bg" style="background-image: url('assets/images/shop-landing/22.webp')"></div>
+        <div class="parallax-overlay"></div>
+        <div class="parallax-content">
+            <p class="parallax-quote">
+                "La qualite n'est jamais un accident, c'est toujours le resultat
+                d'un effort intelligent."
+            </p>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section class="products-section" id="products">
+        <div class="section-header">
+            <span class="section-tag">Notre Selection</span>
+            <h2 class="section-title">Produits Exclusifs</h2>
+        </div>
+
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <article class="product-card" data-product="prod_1">
+                <div class="product-image-wrapper">
+                    <img src="assets/images/shop-landing/22.webp" alt="Serum Regenerant Premium" class="product-image">
+                    <span class="product-badge">Bestseller</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Soins Visage</span>
+                    <h3 class="product-name">Serum Regenerant Premium</h3>
+                    <p class="product-description">Formule concentree aux actifs naturels pour une peau eclatante et revitalisee.</p>
+                    <div class="product-footer">
+                        <div class="product-price">89<span>,00 EUR</span></div>
+                        <button class="btn-buy" data-price="8900" data-name="Serum Regenerant Premium">
+                            Acheter
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Product 2 -->
+            <article class="product-card" data-product="prod_2">
+                <div class="product-image-wrapper">
+                    <img src="assets/images/shop-landing/238.webp" alt="Creme Hydratante Luxe" class="product-image">
+                    <span class="product-badge">Nouveau</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Hydratation</span>
+                    <h3 class="product-name">Creme Hydratante Luxe</h3>
+                    <p class="product-description">Hydratation profonde et durable pour une peau douce et souple toute la journee.</p>
+                    <div class="product-footer">
+                        <div class="product-price">75<span>,00 EUR</span></div>
+                        <button class="btn-buy" data-price="7500" data-name="Creme Hydratante Luxe">
+                            Acheter
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Product 3 -->
+            <article class="product-card" data-product="prod_3">
+                <div class="product-image-wrapper">
+                    <img src="assets/images/shop-landing/354.webp" alt="Huile Precieuse Corps" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Soins Corps</span>
+                    <h3 class="product-name">Huile Precieuse Corps</h3>
+                    <p class="product-description">Melange d'huiles rares pour nourrir et sublimer votre peau en profondeur.</p>
+                    <div class="product-footer">
+                        <div class="product-price">65<span>,00 EUR</span></div>
+                        <button class="btn-buy" data-price="6500" data-name="Huile Precieuse Corps">
+                            Acheter
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Product 4 -->
+            <article class="product-card" data-product="prod_4">
+                <div class="product-image-wrapper">
+                    <img src="assets/images/shop-landing/520.webp" alt="Masque Detox Intense" class="product-image">
+                    <span class="product-badge">Edition Limitee</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Masques</span>
+                    <h3 class="product-name">Masque Detox Intense</h3>
+                    <p class="product-description">Purifiez votre peau en profondeur avec notre masque aux argiles precieuses.</p>
+                    <div class="product-footer">
+                        <div class="product-price">55<span>,00 EUR</span></div>
+                        <button class="btn-buy" data-price="5500" data-name="Masque Detox Intense">
+                            Acheter
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Product 5 -->
+            <article class="product-card" data-product="prod_5">
+                <div class="product-image-wrapper">
+                    <img src="assets/images/shop-landing/605.webp" alt="Elixir Anti-Age" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Anti-Age</span>
+                    <h3 class="product-name">Elixir Anti-Age</h3>
+                    <p class="product-description">Technologie avancee pour lutter contre les signes du temps et preserver votre jeunesse.</p>
+                    <div class="product-footer">
+                        <div class="product-price">120<span>,00 EUR</span></div>
+                        <button class="btn-buy" data-price="12000" data-name="Elixir Anti-Age">
+                            Acheter
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Product 6 -->
+            <article class="product-card" data-product="prod_6">
+                <div class="product-image-wrapper">
+                    <img src="assets/images/shop-landing/641.webp" alt="Coffret Decouverte" class="product-image">
+                    <span class="product-badge">Pack Exclusif</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Coffrets</span>
+                    <h3 class="product-name">Coffret Decouverte</h3>
+                    <p class="product-description">L'ensemble parfait pour decouvrir notre gamme complete de soins d'exception.</p>
+                    <div class="product-footer">
+                        <div class="product-price">199<span>,00 EUR</span></div>
+                        <button class="btn-buy" data-price="19900" data-name="Coffret Decouverte">
+                            Acheter
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Parallax Divider 2 -->
+    <div class="parallax-divider">
+        <div class="parallax-bg" style="background-image: url('assets/images/shop-landing/520.webp')"></div>
+        <div class="parallax-overlay"></div>
+        <div class="parallax-content">
+            <p class="parallax-quote">
+                "Prenez soin de votre corps, c'est le seul endroit
+                ou vous etes oblige de vivre."
+            </p>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="section-header">
+            <span class="section-tag">Nos Engagements</span>
+            <h2 class="section-title">Pourquoi Nous Choisir</h2>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h4 class="feature-title">Qualite Premium</h4>
+                <p class="feature-text">Ingredients selectionnes avec soin pour des resultats visibles.</p>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                        <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                </div>
+                <h4 class="feature-title">Livraison Express</h4>
+                <p class="feature-text">Livraison offerte des 50EUR d'achat en 24-48h.</p>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h4 class="feature-title">Satisfait ou Rembourse</h4>
+                <p class="feature-text">30 jours pour tester nos produits en toute serenite.</p>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                </div>
+                <h4 class="feature-title">Paiement Securise</h4>
+                <p class="feature-text">Transactions protegees par le protocole SSL Stripe.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="newsletter-content">
+            <h2 class="newsletter-title">Restez Informe</h2>
+            <p class="newsletter-text">Inscrivez-vous pour recevoir nos offres exclusives et nos conseils bien-etre.</p>
+            <form class="newsletter-form" id="newsletterForm">
+                <input type="email" class="newsletter-input" placeholder="Votre adresse email" required>
+                <button type="submit" class="newsletter-btn">S'inscrire</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Forever Bien-Etre</div>
+            <nav class="footer-links">
+                <a href="#">Mentions Legales</a>
+                <a href="#">Politique de Confidentialite</a>
+                <a href="#">CGV</a>
+                <a href="#">Contact</a>
+            </nav>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Forever Bien-Etre. Tous droits reserves. Paiements securises par Stripe.</p>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h3 class="modal-title">Merci !</h3>
+            <p class="modal-text">Votre commande a ete traitee avec succes. Vous recevrez un email de confirmation.</p>
+            <button class="modal-btn" onclick="closeModal()">Continuer</button>
+        </div>
+    </div>
+
+    <script>
+        // Stripe Configuration
+        const stripe = Stripe('pk_test_51RM6xS01muTCbxCUhgscA5xCcefwBdf9CL1pvRMaqGKlUQqe9lOndeGdgO0nXrgAB4ISBWjkOniNbSFIcP0WxZK100DGhVeLSD');
+
+        // Parallax Effect for Hero
+        const heroPattern = document.getElementById('heroPattern');
+        let ticking = false;
+
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const heroHeight = document.querySelector('.hero').offsetHeight;
+
+            if (scrolled < heroHeight) {
+                heroPattern.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+
+            // Parallax for dividers
+            document.querySelectorAll('.parallax-bg').forEach(bg => {
+                const rect = bg.parentElement.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+                if (isVisible) {
+                    const offset = (rect.top - window.innerHeight) * 0.3;
+                    bg.style.transform = `translateY(${offset}px)`;
+                }
+            });
+
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        });
+
+        // Scroll Animation for Product Cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.product-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Check URL params on page load (for Stripe return)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            showSuccessModal();
+            // Clean URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        if (urlParams.get('canceled') === 'true') {
+            alert('Paiement annule. Vous pouvez reessayer quand vous le souhaitez.');
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // Stripe Checkout Handler
+        document.querySelectorAll('.btn-buy').forEach(button => {
+            button.addEventListener('click', async function() {
+                const price = this.dataset.price;
+                const name = this.dataset.name;
+
+                this.classList.add('loading');
+                this.disabled = true;
+
+                try {
+                    // Create Stripe Checkout Session via PHP backend
+                    const response = await fetch('stripe-checkout.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ price: parseInt(price), name: name })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                        throw new Error(data.message || data.error);
+                    }
+
+                    // Redirect to Stripe Checkout
+                    if (data.url) {
+                        window.location.href = data.url;
+                    } else if (data.sessionId) {
+                        const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
+                        if (result.error) {
+                            throw new Error(result.error.message);
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Payment error:', error);
+                    this.classList.remove('loading');
+                    this.disabled = false;
+                    alert('Une erreur est survenue: ' + error.message);
+                }
+            });
+        });
+
+        // Modal Functions
+        function showSuccessModal() {
+            document.getElementById('successModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on overlay click
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Newsletter Form
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+
+            // In production, send to your backend
+            console.log('Newsletter subscription:', email);
+
+            this.querySelector('input').value = '';
+            alert('Merci pour votre inscription !');
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
