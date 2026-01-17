@@ -92,11 +92,19 @@
 
         .nav-links {
             display: flex;
+            align-items: center;
             list-style: none;
             gap: 35px;
+            margin: 0;
+            padding: 0;
         }
 
-        .nav-links a {
+        .nav-links li {
+            position: relative;
+            list-style: none;
+        }
+
+        .nav-links > li > a {
             color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
             font-size: 0.9rem;
@@ -104,9 +112,10 @@
             letter-spacing: 0.5px;
             position: relative;
             transition: color 0.3s ease;
+            display: inline-block;
         }
 
-        .nav-links a::after {
+        .nav-links > li > a::after {
             content: '';
             position: absolute;
             bottom: -5px;
@@ -117,11 +126,11 @@
             transition: width 0.3s ease;
         }
 
-        .nav-links a:hover {
+        .nav-links > li > a:hover {
             color: var(--white);
         }
 
-        .nav-links a:hover::after {
+        .nav-links > li > a:hover::after {
             width: 100%;
         }
 
@@ -1283,6 +1292,197 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* ==================== FITTRACK DROPDOWN ==================== */
+        .fittrack-dropdown {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .fittrack-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            padding: 0;
+            white-space: nowrap;
+        }
+
+        .fittrack-toggle:hover {
+            color: var(--white);
+        }
+
+        .fittrack-toggle::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .fittrack-toggle:hover::after,
+        .fittrack-dropdown.active .fittrack-toggle::after {
+            width: 100%;
+        }
+
+        .fittrack-toggle svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        .fittrack-dropdown.active .fittrack-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        .fittrack-submenu {
+            position: absolute;
+            top: calc(100% + 20px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            min-width: 280px;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .fittrack-dropdown.active .fittrack-submenu {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .fittrack-submenu::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid var(--white);
+        }
+
+        .fittrack-submenu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .fittrack-submenu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            background: linear-gradient(90deg, var(--accent-light), transparent);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .fittrack-submenu a:last-child {
+            border-bottom: none;
+        }
+
+        .fittrack-submenu a:hover {
+            background: var(--bg-light);
+            padding-left: 25px;
+            color: var(--accent);
+        }
+
+        .fittrack-submenu a:hover::before {
+            width: 100%;
+        }
+
+        .fittrack-submenu a span:first-child {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .fittrack-submenu a span:last-child {
+            white-space: nowrap;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .fittrack-dropdown {
+                width: 100%;
+            }
+
+            .fittrack-toggle {
+                width: 100%;
+                justify-content: space-between;
+                padding: 12px 0;
+            }
+
+            .fittrack-submenu {
+                position: static;
+                transform: none !important;
+                box-shadow: none;
+                background: rgba(255, 255, 255, 0.05);
+                margin-top: 10px;
+                border-radius: 8px;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease, opacity 0.3s ease;
+            }
+
+            .fittrack-dropdown.active .fittrack-submenu {
+                max-height: 600px;
+            }
+
+            .fittrack-submenu::before {
+                display: none;
+            }
+
+            .fittrack-submenu a {
+                color: rgba(255, 255, 255, 0.85);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 12px 16px;
+            }
+
+            .fittrack-submenu a:hover {
+                background: rgba(255, 255, 255, 0.1);
+                color: var(--accent-light);
+                padding-left: 20px;
+            }
+
+            .fittrack-submenu a::before {
+                background: linear-gradient(90deg, rgba(201, 169, 98, 0.2), transparent);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1296,6 +1496,44 @@
                 <ul class="nav-links">
                     <li><a href="#hero">Accueil</a></li>
                     <li><a href="#products">Boutique</a></li>
+                    <li class="fittrack-dropdown">
+                        <button class="fittrack-toggle" id="fittrackToggle">
+                            <span>💪 FitTrack Pro</span>
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="fittrack-submenu">
+                            <a href="http://localhost/foreverbienetre/fittrack-pricing">
+                                <span>📋</span>
+                                <span>Pricing & Plans</span>
+                            </a>
+                            <a href="http://localhost/foreverbienetre/fittrack-dashboard">
+                                <span>📊</span>
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="http://localhost/foreverbienetre/fittrack-nutrition">
+                                <span>🥗</span>
+                                <span>Nutrition Tracker</span>
+                            </a>
+                            <a href="http://localhost/foreverbienetre/fittrack-workouts">
+                                <span>🏋️</span>
+                                <span>Workout Logger</span>
+                            </a>
+                            <a href="http://localhost/foreverbienetre/fittrack-progress">
+                                <span>📈</span>
+                                <span>Progress Tracking</span>
+                            </a>
+                            <a href="http://localhost/foreverbienetre/fittrack-goals">
+                                <span>🎯</span>
+                                <span>Goals Manager</span>
+                            </a>
+                            <a href="http://localhost/foreverbienetre/fittrack-settings">
+                                <span>⚙️</span>
+                                <span>Settings</span>
+                            </a>
+                        </div>
+                    </li>
                     <li><a href="#features">Nos Engagements</a></li>
                     <li><a href="#newsletter">Contact</a></li>
                 </ul>
@@ -2090,6 +2328,41 @@
                 }
             });
         });
+
+        // ==================== FITTRACK DROPDOWN ====================
+        const fittrackToggle = document.getElementById('fittrackToggle');
+        const fittrackDropdown = document.querySelector('.fittrack-dropdown');
+
+        if (fittrackToggle && fittrackDropdown) {
+            // Toggle dropdown on click
+            fittrackToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fittrackDropdown.classList.toggle('active');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!fittrackDropdown.contains(e.target)) {
+                    fittrackDropdown.classList.remove('active');
+                }
+            });
+
+            // Close dropdown when clicking submenu link
+            const submenuLinks = fittrackDropdown.querySelectorAll('.fittrack-submenu a');
+            submenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    fittrackDropdown.classList.remove('active');
+                });
+            });
+
+            // Close dropdown on ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && fittrackDropdown.classList.contains('active')) {
+                    fittrackDropdown.classList.remove('active');
+                }
+            });
+        }
     </script>
 
 </body>
