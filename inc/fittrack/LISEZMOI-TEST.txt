@@ -1,0 +1,87 @@
+╔══════════════════════════════════════════════════════════════╗
+║          FITTRACK PRO - TEST DES BOUTONS                     ║
+║          Guide Rapide de Test                                ║
+╚══════════════════════════════════════════════════════════════╝
+
+✅ COMMENT TESTER LES BOUTONS (3 SECONDES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Double-cliquez sur le fichier: OUVRIR-TEST.bat
+
+2. Une page web s'ouvre dans votre navigateur
+
+3. Cliquez sur le bouton "Test Pro Button"
+
+4. Vérifiez les logs qui s'affichent à l'écran
+
+✅ CE QUE VOUS DEVEZ VOIR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Test Results:
+✓ Page loaded successfully
+✓ jQuery version: 3.7.1
+✓ fittrackData.ajaxUrl: /wp-admin/admin-ajax.php
+✓ fittrackData.isLoggedIn: false
+✓ Click the "Test Pro Button" to test functionality
+
+[Après clic sur le bouton]
+✓ Button clicked! Plan: pro
+✓ User not logged in - Would redirect to login
+
+[Alert popup]
+Please log in to subscribe (TEST MODE)
+
+
+✅ SI ÇA FONCTIONNE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+→ Les boutons FitTrack sont FONCTIONNELS ! ✅
+→ Le code JavaScript fonctionne correctement
+→ Prêt pour déploiement sur le serveur
+
+
+✅ PROCHAINES ÉTAPES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Pour tester sur le site réel (foreverbienetre.com):
+
+1. Déployer le code sur le serveur (FTP, Git, etc.)
+
+2. Configurer Stripe dans wp-config.php:
+
+   define('FITTRACK_STRIPE_PUBLISHABLE_KEY', 'pk_test_...');
+   define('FITTRACK_STRIPE_SECRET_KEY', 'sk_test_...');
+
+   Récupérer les clés: https://dashboard.stripe.com/test/apikeys
+
+3. Tester sur: https://foreverbienetre.com/fittrack-pricing
+
+
+📁 FICHIERS DE TEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- OUVRIR-TEST.bat ........... Double-clic pour ouvrir le test
+- test-pricing.html ......... Fichier de test autonome
+- LISEZMOI-TEST.txt ......... Ce fichier
+- BUGFIX-BUTTONS.md ......... Documentation technique complète
+
+
+🔧 EN CAS DE PROBLÈME
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Si rien ne se passe après le clic:
+→ Ouvrir Console navigateur (F12)
+→ Vérifier les erreurs JavaScript
+
+Si la page ne s'ouvre pas:
+→ Ouvrir manuellement test-pricing.html dans Chrome/Firefox
+
+Support:
+→ Voir BUGFIX-BUTTONS.md pour documentation complète
+
+
+╔══════════════════════════════════════════════════════════════╗
+║  Correction effectuée le: 17 janvier 2026                    ║
+║  Commit GitHub: 7ef1218                                      ║
+║  Expert: expert_files + expert_console                       ║
+╚══════════════════════════════════════════════════════════════╝
