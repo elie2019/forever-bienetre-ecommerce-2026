@@ -536,6 +536,173 @@
             height: 30px;
         }
 
+        /* ==================== CAROUSEL SLIDER ==================== */
+        .carousel-section {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            min-height: 500px;
+            overflow: hidden;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slides {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .carousel-slide {
+            flex: 0 0 33.333%;
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 8s ease-out;
+        }
+
+        .carousel-slide.active img {
+            transform: scale(1.1);
+        }
+
+        .carousel-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom,
+                rgba(26, 26, 46, 0.3) 0%,
+                rgba(26, 26, 46, 0.5) 50%,
+                rgba(26, 26, 46, 0.7) 100%);
+        }
+
+        .carousel-content {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: var(--white);
+            z-index: 10;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .carousel-content h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .carousel-content p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+
+        .carousel-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .carousel-btn:hover {
+            background: var(--accent-light);
+            transform: translateY(-3px);
+        }
+
+        .carousel-nav {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 20;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            border: 2px solid rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .carousel-dot.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: scale(1.2);
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .carousel-arrow:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .carousel-arrow svg {
+            width: 24px;
+            height: 24px;
+            color: var(--white);
+        }
+
+        .carousel-arrow.prev {
+            left: 20px;
+        }
+
+        .carousel-arrow.next {
+            right: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-section {
+                height: 60vh;
+                min-height: 400px;
+            }
+            .carousel-arrow {
+                width: 40px;
+                height: 40px;
+            }
+            .carousel-arrow svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
         /* ==================== SECTIONS ==================== */
         section {
             position: relative;
@@ -1196,6 +1363,63 @@
         </div>
     </section>
 
+    <!-- Carousel Slider Section -->
+    <section class="carousel-section" id="carousel">
+        <div class="carousel-container">
+            <div class="carousel-slides" id="carouselSlides">
+                <!-- Slide 1 - Aloe Wellness -->
+                <div class="carousel-slide active">
+                    <img src="assets/images/shop-landing/slider-1-aloe.png" alt="Forever Aloe Vera - Bien-Etre Naturel">
+                    <div class="carousel-overlay"></div>
+                    <div class="carousel-content">
+                        <h2>Le Pouvoir de l'Aloe Vera</h2>
+                        <p>Decouvrez la purete de l'Aloe vera concentree a 99,7% pour un bien-etre naturel au quotidien</p>
+                        <a href="#products" class="carousel-btn">Decouvrir nos produits</a>
+                    </div>
+                </div>
+                <!-- Slide 2 - Beauty -->
+                <div class="carousel-slide">
+                    <img src="assets/images/shop-landing/slider-2-beauty.png" alt="Forever Beaute - Soins Premium">
+                    <div class="carousel-overlay"></div>
+                    <div class="carousel-content">
+                        <h2>Beaute et Elegance</h2>
+                        <p>Des soins d'exception pour sublimer votre peau et reveler votre eclat naturel</p>
+                        <a href="#products" class="carousel-btn">Explorer la gamme beaute</a>
+                    </div>
+                </div>
+                <!-- Slide 3 - Vitality -->
+                <div class="carousel-slide">
+                    <img src="assets/images/shop-landing/slider-3-vitality.png" alt="Forever Vitalite - Energie Naturelle">
+                    <div class="carousel-overlay"></div>
+                    <div class="carousel-content">
+                        <h2>Energie et Vitalite</h2>
+                        <p>Boostez votre energie avec nos complements nutritionnels naturels et efficaces</p>
+                        <a href="#products" class="carousel-btn">Voir les programmes vitalite</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Arrows -->
+            <button class="carousel-arrow prev" onclick="prevSlide()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </button>
+            <button class="carousel-arrow next" onclick="nextSlide()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </button>
+
+            <!-- Navigation Dots -->
+            <div class="carousel-nav">
+                <button class="carousel-dot active" onclick="goToSlide(0)"></button>
+                <button class="carousel-dot" onclick="goToSlide(1)"></button>
+                <button class="carousel-dot" onclick="goToSlide(2)"></button>
+            </div>
+        </div>
+    </section>
+
     <!-- Parallax Divider 1 -->
     <div class="parallax-divider">
         <div class="parallax-bg" style="background-image: url('assets/images/shop-landing/22.webp')"></div>
@@ -1216,18 +1440,18 @@
         </div>
 
         <div class="products-grid">
-            <!-- Product 1 -->
-            <article class="product-card" data-id="prod_1" data-name="Serum Regenerant Premium" data-price="8900" data-image="assets/images/shop-landing/22.webp">
+            <!-- Product 1 - Ref 815 -->
+            <article class="product-card" data-id="815" data-name="Forever Aloe Vera Gel (1L)" data-price="3729" data-image="assets/images/shop-landing/22.webp">
                 <div class="product-image-wrapper">
-                    <img src="assets/images/shop-landing/22.webp" alt="Serum Regenerant Premium" class="product-image">
+                    <img src="assets/images/shop-landing/22.webp" alt="Forever Aloe Vera Gel" class="product-image">
                     <span class="product-badge">Bestseller</span>
                 </div>
                 <div class="product-info">
-                    <span class="product-category">Soins Visage</span>
-                    <h3 class="product-name">Serum Regenerant Premium</h3>
-                    <p class="product-description">Formule concentree aux actifs naturels pour une peau eclatante et revitalisee.</p>
+                    <span class="product-category">Ref. 815 - Nutrition</span>
+                    <h3 class="product-name">Forever Aloe Vera Gel™</h3>
+                    <p class="product-description">Pulpe d'Aloe vera concentree a 99,7%, elaboree a partir de feuilles entieres. Contribue au fonctionnement normal du systeme immunitaire.</p>
                     <div class="product-footer">
-                        <div class="product-price">89<span>,00 EUR</span></div>
+                        <div class="product-price">37<span>,29 EUR</span></div>
                         <button class="btn-add-cart">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 5v14M5 12h14"/>
@@ -1238,18 +1462,18 @@
                 </div>
             </article>
 
-            <!-- Product 2 -->
-            <article class="product-card" data-id="prod_2" data-name="Creme Hydratante Luxe" data-price="7500" data-image="assets/images/shop-landing/238.webp">
+            <!-- Product 2 - Ref 613 -->
+            <article class="product-card" data-id="613" data-name="Forever Marine Collagen (30 sachets)" data-price="8868" data-image="assets/images/shop-landing/238.webp">
                 <div class="product-image-wrapper">
-                    <img src="assets/images/shop-landing/238.webp" alt="Creme Hydratante Luxe" class="product-image">
+                    <img src="assets/images/shop-landing/238.webp" alt="Forever Marine Collagen" class="product-image">
                     <span class="product-badge">Nouveau</span>
                 </div>
                 <div class="product-info">
-                    <span class="product-category">Hydratation</span>
-                    <h3 class="product-name">Creme Hydratante Luxe</h3>
-                    <p class="product-description">Hydratation profonde et durable pour une peau douce et souple toute la journee.</p>
+                    <span class="product-category">Ref. 613 - Beaute</span>
+                    <h3 class="product-name">Forever Marine Collagen™</h3>
+                    <p class="product-description">Solution de collagene marin (3000mg), antioxydants, vitamines A, C, Biotine et Zinc. La biotine aide a maintenir une peau et des cheveux normaux.</p>
                     <div class="product-footer">
-                        <div class="product-price">75<span>,00 EUR</span></div>
+                        <div class="product-price">88<span>,68 EUR</span></div>
                         <button class="btn-add-cart">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 5v14M5 12h14"/>
@@ -1260,17 +1484,17 @@
                 </div>
             </article>
 
-            <!-- Product 3 -->
-            <article class="product-card" data-id="prod_3" data-name="Huile Precieuse Corps" data-price="6500" data-image="assets/images/shop-landing/354.webp">
+            <!-- Product 3 - Ref 473 -->
+            <article class="product-card" data-id="473" data-name="Forever ARGI+ (30 sachets)" data-price="7924" data-image="assets/images/shop-landing/354.webp">
                 <div class="product-image-wrapper">
-                    <img src="assets/images/shop-landing/354.webp" alt="Huile Precieuse Corps" class="product-image">
+                    <img src="assets/images/shop-landing/354.webp" alt="Forever ARGI+" class="product-image">
                 </div>
                 <div class="product-info">
-                    <span class="product-category">Soins Corps</span>
-                    <h3 class="product-name">Huile Precieuse Corps</h3>
-                    <p class="product-description">Melange d'huiles rares pour nourrir et sublimer votre peau en profondeur.</p>
+                    <span class="product-category">Ref. 473 - Vitalite</span>
+                    <h3 class="product-name">Forever ARGI+™</h3>
+                    <p class="product-description">Combine la L-Arginine a un cocktail de vitamines et extraits de fruits pour la vitalite, la force et l'endurance. Lutte contre la fatigue.</p>
                     <div class="product-footer">
-                        <div class="product-price">65<span>,00 EUR</span></div>
+                        <div class="product-price">79<span>,24 EUR</span></div>
                         <button class="btn-add-cart">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 5v14M5 12h14"/>
@@ -1281,18 +1505,18 @@
                 </div>
             </article>
 
-            <!-- Product 4 -->
-            <article class="product-card" data-id="prod_4" data-name="Masque Detox Intense" data-price="5500" data-image="assets/images/shop-landing/520.webp">
+            <!-- Product 4 - Ref 238 -->
+            <article class="product-card" data-id="238" data-name="Forever Aloe Scrub (99g)" data-price="2632" data-image="assets/images/shop-landing/520.webp">
                 <div class="product-image-wrapper">
-                    <img src="assets/images/shop-landing/520.webp" alt="Masque Detox Intense" class="product-image">
-                    <span class="product-badge">Edition Limitee</span>
+                    <img src="assets/images/shop-landing/520.webp" alt="Forever Aloe Scrub" class="product-image">
+                    <span class="product-badge">Soins Corps</span>
                 </div>
                 <div class="product-info">
-                    <span class="product-category">Masques</span>
-                    <h3 class="product-name">Masque Detox Intense</h3>
-                    <p class="product-description">Purifiez votre peau en profondeur avec notre masque aux argiles precieuses.</p>
+                    <span class="product-category">Ref. 238 - Corps</span>
+                    <h3 class="product-name">Forever Aloe Scrub™</h3>
+                    <p class="product-description">Creme onctueuse enrichie en grains de cire de jojoba qui elimine impuretes et cellules mortes. Dynamise le renouvellement cellulaire.</p>
                     <div class="product-footer">
-                        <div class="product-price">55<span>,00 EUR</span></div>
+                        <div class="product-price">26<span>,32 EUR</span></div>
                         <button class="btn-add-cart">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 5v14M5 12h14"/>
@@ -1303,17 +1527,17 @@
                 </div>
             </article>
 
-            <!-- Product 5 -->
-            <article class="product-card" data-id="prod_5" data-name="Elixir Anti-Age" data-price="12000" data-image="assets/images/shop-landing/605.webp">
+            <!-- Product 5 - Ref 610 -->
+            <article class="product-card" data-id="610" data-name="Forever Active Pro-B (30 gelules)" data-price="3979" data-image="assets/images/shop-landing/605.webp">
                 <div class="product-image-wrapper">
-                    <img src="assets/images/shop-landing/605.webp" alt="Elixir Anti-Age" class="product-image">
+                    <img src="assets/images/shop-landing/605.webp" alt="Forever Active Pro-B" class="product-image">
                 </div>
                 <div class="product-info">
-                    <span class="product-category">Anti-Age</span>
-                    <h3 class="product-name">Elixir Anti-Age</h3>
-                    <p class="product-description">Technologie avancee pour lutter contre les signes du temps et preserver votre jeunesse.</p>
+                    <span class="product-category">Ref. 610 - Immunite</span>
+                    <h3 class="product-name">Forever Active Pro-B™</h3>
+                    <p class="product-description">Contient des probiotiques qui participent a l'equilibre de la flore intestinale et soutiennent le systeme immunitaire.</p>
                     <div class="product-footer">
-                        <div class="product-price">120<span>,00 EUR</span></div>
+                        <div class="product-price">39<span>,79 EUR</span></div>
                         <button class="btn-add-cart">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 5v14M5 12h14"/>
@@ -1324,18 +1548,18 @@
                 </div>
             </article>
 
-            <!-- Product 6 -->
-            <article class="product-card" data-id="prod_6" data-name="Coffret Decouverte" data-price="19900" data-image="assets/images/shop-landing/641.webp">
+            <!-- Product 6 - Ref 456 -->
+            <article class="product-card" data-id="456" data-name="Vital 5 - Forever Aloe Vera Gel (8 produits)" data-price="33046" data-image="assets/images/shop-landing/641.webp">
                 <div class="product-image-wrapper">
-                    <img src="assets/images/shop-landing/641.webp" alt="Coffret Decouverte" class="product-image">
-                    <span class="product-badge">Pack Exclusif</span>
+                    <img src="assets/images/shop-landing/641.webp" alt="Vital 5 Forever" class="product-image">
+                    <span class="product-badge">Pack Premium</span>
                 </div>
                 <div class="product-info">
-                    <span class="product-category">Coffrets</span>
-                    <h3 class="product-name">Coffret Decouverte</h3>
-                    <p class="product-description">L'ensemble parfait pour decouvrir notre gamme complete de soins d'exception.</p>
+                    <span class="product-category">Ref. 456 - Programme</span>
+                    <h3 class="product-name">Vital 5™ Programme Complet</h3>
+                    <p class="product-description">Pack synergie pour retablir l'equilibre intestinal et preserver le metabolisme. Inclut 4 Aloe Vera Gel, Pro-B, Argi+, Daily et Arctic Sea.</p>
                     <div class="product-footer">
-                        <div class="product-price">199<span>,00 EUR</span></div>
+                        <div class="product-price">330<span>,46 EUR</span></div>
                         <button class="btn-add-cart">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 5v14M5 12h14"/>
@@ -1462,6 +1686,79 @@
     </div>
 
     <script>
+        // ==================== CAROUSEL SLIDER ====================
+        let currentSlide = 0;
+        const totalSlides = 3;
+        const slidesContainer = document.getElementById('carouselSlides');
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        let autoSlideInterval;
+
+        function updateCarousel() {
+            slidesContainer.style.transform = `translateX(-${currentSlide * 33.333}%)`;
+
+            // Update active states
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+            resetAutoSlide();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+            resetAutoSlide();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+            resetAutoSlide();
+        }
+
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(nextSlide, 6000);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+
+        // Start auto-slide on load
+        startAutoSlide();
+
+        // Pause on hover
+        document.querySelector('.carousel-section').addEventListener('mouseenter', () => {
+            clearInterval(autoSlideInterval);
+        });
+
+        document.querySelector('.carousel-section').addEventListener('mouseleave', () => {
+            startAutoSlide();
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.querySelector('.carousel-section').addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.querySelector('.carousel-section').addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) nextSlide();
+            if (touchEndX - touchStartX > 50) prevSlide();
+        });
+
         // Stripe Configuration
         const stripe = Stripe('pk_test_51RM6xS01muTCbxCUhgscA5xCcefwBdf9CL1pvRMaqGKlUQqe9lOndeGdgO0nXrgAB4ISBWjkOniNbSFIcP0WxZK100DGhVeLSD');
 
