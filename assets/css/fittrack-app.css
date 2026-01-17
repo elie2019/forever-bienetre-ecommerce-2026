@@ -1,0 +1,505 @@
+/**
+ * FitTrack Pro - Application Styles
+ * Styles communs pour toutes les pages FitTrack
+ */
+
+:root {
+    --fittrack-primary: #1a1a2e;
+    --fittrack-secondary: #16213e;
+    --fittrack-accent: #c9a962;
+    --fittrack-accent-light: #e8d5a3;
+    --fittrack-success: #28a745;
+    --fittrack-danger: #dc3545;
+    --fittrack-warning: #ffc107;
+    --fittrack-info: #17a2b8;
+    --fittrack-white: #ffffff;
+    --fittrack-bg-light: #f8f7f4;
+    --fittrack-text: #333333;
+    --fittrack-text-light: #666666;
+    --fittrack-border: #e0e0e0;
+    --fittrack-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    --fittrack-radius: 12px;
+    --fittrack-transition: all 0.3s ease;
+}
+
+/* Layout FitTrack */
+.fittrack-wrapper {
+    min-height: 100vh;
+    background: var(--fittrack-bg-light);
+    padding-top: 80px; /* Header offset */
+}
+
+.fittrack-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.fittrack-container-narrow {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Header FitTrack */
+.fittrack-header {
+    background: linear-gradient(135deg, var(--fittrack-primary) 0%, var(--fittrack-secondary) 100%);
+    color: var(--fittrack-white);
+    padding: 60px 20px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.fittrack-header-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: bounce-slow 3s ease-in-out infinite;
+}
+
+@keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.fittrack-header-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.fittrack-header-subtitle {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    opacity: 0.9;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Cards */
+.fittrack-card {
+    background: var(--fittrack-white);
+    border-radius: var(--fittrack-radius);
+    box-shadow: var(--fittrack-shadow);
+    padding: 30px;
+    margin-bottom: 30px;
+    transition: var(--fittrack-transition);
+}
+
+.fittrack-card:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.fittrack-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--fittrack-bg-light);
+}
+
+.fittrack-card-title {
+    font-size: 1.5rem;
+    color: var(--fittrack-primary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.fittrack-card-title-icon {
+    font-size: 1.8rem;
+}
+
+.fittrack-card-body {
+    padding: 10px 0;
+}
+
+/* Grid System */
+.fittrack-grid {
+    display: grid;
+    gap: 30px;
+}
+
+.fittrack-grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.fittrack-grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.fittrack-grid-4 {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Buttons */
+.fittrack-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--fittrack-transition);
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.fittrack-btn-primary {
+    background: linear-gradient(135deg, var(--fittrack-primary), var(--fittrack-secondary));
+    color: var(--fittrack-white);
+}
+
+.fittrack-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(26, 26, 46, 0.3);
+}
+
+.fittrack-btn-accent {
+    background: var(--fittrack-accent);
+    color: var(--fittrack-primary);
+}
+
+.fittrack-btn-accent:hover {
+    background: var(--fittrack-accent-light);
+    transform: translateY(-2px);
+}
+
+.fittrack-btn-success {
+    background: var(--fittrack-success);
+    color: var(--fittrack-white);
+}
+
+.fittrack-btn-danger {
+    background: var(--fittrack-danger);
+    color: var(--fittrack-white);
+}
+
+.fittrack-btn-outline {
+    background: transparent;
+    border: 2px solid var(--fittrack-primary);
+    color: var(--fittrack-primary);
+}
+
+.fittrack-btn-outline:hover {
+    background: var(--fittrack-primary);
+    color: var(--fittrack-white);
+}
+
+/* Forms */
+.fittrack-form-group {
+    margin-bottom: 20px;
+}
+
+.fittrack-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--fittrack-primary);
+    font-size: 0.95rem;
+}
+
+.fittrack-input,
+.fittrack-textarea,
+.fittrack-select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid var(--fittrack-border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    transition: var(--fittrack-transition);
+}
+
+.fittrack-input:focus,
+.fittrack-textarea:focus,
+.fittrack-select:focus {
+    outline: none;
+    border-color: var(--fittrack-accent);
+    box-shadow: 0 0 0 3px rgba(201, 169, 98, 0.1);
+}
+
+.fittrack-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Stats Cards */
+.fittrack-stat-card {
+    background: linear-gradient(135deg, var(--fittrack-white) 0%, var(--fittrack-bg-light) 100%);
+    border-radius: var(--fittrack-radius);
+    padding: 25px;
+    text-align: center;
+    box-shadow: var(--fittrack-shadow);
+    transition: var(--fittrack-transition);
+}
+
+.fittrack-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.fittrack-stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.fittrack-stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--fittrack-primary);
+    margin-bottom: 8px;
+}
+
+.fittrack-stat-label {
+    font-size: 0.9rem;
+    color: var(--fittrack-text-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Tables */
+.fittrack-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--fittrack-white);
+    border-radius: var(--fittrack-radius);
+    overflow: hidden;
+}
+
+.fittrack-table thead {
+    background: var(--fittrack-primary);
+    color: var(--fittrack-white);
+}
+
+.fittrack-table th,
+.fittrack-table td {
+    padding: 16px;
+    text-align: left;
+}
+
+.fittrack-table tbody tr {
+    border-bottom: 1px solid var(--fittrack-border);
+    transition: var(--fittrack-transition);
+}
+
+.fittrack-table tbody tr:hover {
+    background: var(--fittrack-bg-light);
+}
+
+/* Badges */
+.fittrack-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fittrack-badge-success {
+    background: var(--fittrack-success);
+    color: var(--fittrack-white);
+}
+
+.fittrack-badge-warning {
+    background: var(--fittrack-warning);
+    color: var(--fittrack-primary);
+}
+
+.fittrack-badge-danger {
+    background: var(--fittrack-danger);
+    color: var(--fittrack-white);
+}
+
+.fittrack-badge-info {
+    background: var(--fittrack-info);
+    color: var(--fittrack-white);
+}
+
+/* Progress Bars */
+.fittrack-progress {
+    width: 100%;
+    height: 10px;
+    background: var(--fittrack-border);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.fittrack-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--fittrack-accent), var(--fittrack-accent-light));
+    transition: width 0.6s ease;
+    border-radius: 20px;
+}
+
+/* Alerts */
+.fittrack-alert {
+    padding: 18px 24px;
+    border-radius: var(--fittrack-radius);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.fittrack-alert-success {
+    background: #d4edda;
+    border-left: 4px solid var(--fittrack-success);
+    color: #155724;
+}
+
+.fittrack-alert-danger {
+    background: #f8d7da;
+    border-left: 4px solid var(--fittrack-danger);
+    color: #721c24;
+}
+
+.fittrack-alert-warning {
+    background: #fff3cd;
+    border-left: 4px solid var(--fittrack-warning);
+    color: #856404;
+}
+
+.fittrack-alert-info {
+    background: #d1ecf1;
+    border-left: 4px solid var(--fittrack-info);
+    color: #0c5460;
+}
+
+/* Empty States */
+.fittrack-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--fittrack-text-light);
+}
+
+.fittrack-empty-icon {
+    font-size: 4rem;
+    opacity: 0.3;
+    margin-bottom: 20px;
+}
+
+.fittrack-empty-title {
+    font-size: 1.5rem;
+    color: var(--fittrack-text);
+    margin-bottom: 10px;
+}
+
+.fittrack-empty-text {
+    font-size: 1rem;
+    margin-bottom: 25px;
+}
+
+/* Loading States */
+.fittrack-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.fittrack-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--fittrack-border);
+    border-top-color: var(--fittrack-accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Tabs */
+.fittrack-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--fittrack-border);
+    margin-bottom: 30px;
+}
+
+.fittrack-tab {
+    padding: 15px 30px;
+    background: none;
+    border: none;
+    color: var(--fittrack-text-light);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--fittrack-transition);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.fittrack-tab:hover {
+    color: var(--fittrack-primary);
+}
+
+.fittrack-tab.active {
+    color: var(--fittrack-accent);
+    border-bottom-color: var(--fittrack-accent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .fittrack-wrapper {
+        padding-top: 70px;
+    }
+
+    .fittrack-header {
+        padding: 40px 20px;
+    }
+
+    .fittrack-container,
+    .fittrack-container-narrow {
+        padding: 20px 15px;
+    }
+
+    .fittrack-card {
+        padding: 20px;
+    }
+
+    .fittrack-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .fittrack-grid-2,
+    .fittrack-grid-3,
+    .fittrack-grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .fittrack-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .fittrack-tab {
+        white-space: nowrap;
+        padding: 12px 20px;
+    }
+}
+
+/* Utilities */
+.fittrack-text-center { text-align: center; }
+.fittrack-text-right { text-align: right; }
+.fittrack-mt-10 { margin-top: 10px; }
+.fittrack-mt-20 { margin-top: 20px; }
+.fittrack-mt-30 { margin-top: 30px; }
+.fittrack-mb-10 { margin-bottom: 10px; }
+.fittrack-mb-20 { margin-bottom: 20px; }
+.fittrack-mb-30 { margin-bottom: 30px; }
+.fittrack-flex { display: flex; }
+.fittrack-flex-between { display: flex; justify-content: space-between; align-items: center; }
+.fittrack-flex-center { display: flex; justify-content: center; align-items: center; }
+.fittrack-gap-10 { gap: 10px; }
+.fittrack-gap-20 { gap: 20px; }

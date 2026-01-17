@@ -57,30 +57,59 @@ class FitTrack_Pro {
      * Load dependencies
      */
     private function load_dependencies() {
+        // Data Synchronization System (NEW - Priority Load)
+        if (file_exists(FITTRACK_PATH . 'fittrack-data-sync.php')) {
+            require_once FITTRACK_PATH . 'fittrack-data-sync.php';
+        }
+
         // Core functionality
-        require_once FITTRACK_PATH . 'includes/class-fittrack-cpt.php';
-        require_once FITTRACK_PATH . 'includes/class-fittrack-database.php';
-        require_once FITTRACK_PATH . 'includes/class-fittrack-auth.php';
-        require_once FITTRACK_PATH . 'includes/class-fittrack-user.php';
+        if (file_exists(FITTRACK_PATH . 'includes/class-fittrack-cpt.php')) {
+            require_once FITTRACK_PATH . 'includes/class-fittrack-cpt.php';
+        }
+        if (file_exists(FITTRACK_PATH . 'includes/class-fittrack-database.php')) {
+            require_once FITTRACK_PATH . 'includes/class-fittrack-database.php';
+        }
+        if (file_exists(FITTRACK_PATH . 'includes/class-fittrack-auth.php')) {
+            require_once FITTRACK_PATH . 'includes/class-fittrack-auth.php';
+        }
+        if (file_exists(FITTRACK_PATH . 'includes/class-fittrack-user.php')) {
+            require_once FITTRACK_PATH . 'includes/class-fittrack-user.php';
+        }
 
         // Stripe integration
-        require_once FITTRACK_PATH . 'includes/class-fittrack-stripe.php';
-        require_once FITTRACK_PATH . 'includes/class-fittrack-subscriptions.php';
+        if (file_exists(FITTRACK_PATH . 'includes/class-fittrack-stripe.php')) {
+            require_once FITTRACK_PATH . 'includes/class-fittrack-stripe.php';
+        }
+        if (file_exists(FITTRACK_PATH . 'includes/class-fittrack-subscriptions.php')) {
+            require_once FITTRACK_PATH . 'includes/class-fittrack-subscriptions.php';
+        }
 
         // Modules
-        require_once FITTRACK_PATH . 'modules/nutrition/class-nutrition.php';
-        require_once FITTRACK_PATH . 'modules/workouts/class-workouts.php';
-        require_once FITTRACK_PATH . 'modules/progress/class-progress.php';
-        require_once FITTRACK_PATH . 'modules/goals/class-goals.php';
+        if (file_exists(FITTRACK_PATH . 'modules/nutrition/class-nutrition.php')) {
+            require_once FITTRACK_PATH . 'modules/nutrition/class-nutrition.php';
+        }
+        if (file_exists(FITTRACK_PATH . 'modules/workouts/class-workouts.php')) {
+            require_once FITTRACK_PATH . 'modules/workouts/class-workouts.php';
+        }
+        if (file_exists(FITTRACK_PATH . 'modules/progress/class-progress.php')) {
+            require_once FITTRACK_PATH . 'modules/progress/class-progress.php';
+        }
+        if (file_exists(FITTRACK_PATH . 'modules/goals/class-goals.php')) {
+            require_once FITTRACK_PATH . 'modules/goals/class-goals.php';
+        }
 
         // AI Features
-        require_once FITTRACK_PATH . 'includes/class-fittrack-ai.php';
+        if (file_exists(FITTRACK_PATH . 'includes/class-fittrack-ai.php')) {
+            require_once FITTRACK_PATH . 'includes/class-fittrack-ai.php';
+        }
 
         // REST API
-        require_once FITTRACK_PATH . 'includes/class-fittrack-api.php';
+        if (file_exists(FITTRACK_PATH . 'includes/class-fittrack-api.php')) {
+            require_once FITTRACK_PATH . 'includes/class-fittrack-api.php';
+        }
 
         // Admin
-        if (is_admin()) {
+        if (is_admin() && file_exists(FITTRACK_PATH . 'admin/class-fittrack-admin.php')) {
             require_once FITTRACK_PATH . 'admin/class-fittrack-admin.php';
         }
     }
