@@ -1447,9 +1447,9 @@
 
         .fittrack-submenu {
             position: absolute;
-            top: calc(100% + 20px);
+            top: 100%;
             left: 50%;
-            transform: translateX(-50%) translateY(-10px);
+            transform: translateX(-50%) translateY(-5px);
             background: var(--white);
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
@@ -1460,6 +1460,7 @@
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             z-index: 9999;
             overflow: hidden;
+            margin-top: 5px; /* Petit espace pour l'animation */
         }
 
         .fittrack-dropdown.active .fittrack-submenu {
@@ -1491,14 +1492,12 @@
         .fittrack-submenu::before {
             content: '';
             position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-bottom: 8px solid var(--white);
+            top: -5px;
+            left: 0;
+            right: 0;
+            height: 5px;
+            /* Zone invisible pour maintenir le hover pendant le trajet du curseur */
+            background: transparent;
         }
 
         .fittrack-submenu a {
