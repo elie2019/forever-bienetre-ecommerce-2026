@@ -58,7 +58,7 @@ if ($price <= 0) {
 
 // Base URL for redirects
 $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
-$theme_url = $base_url . '/wp-content/themes/forever-be-wp-premium';
+$site_url = $base_url . '/foreverbienetre';
 
 // Create Stripe Checkout Session using cURL
 $checkout_data = [
@@ -75,8 +75,8 @@ $checkout_data = [
         'quantity' => 1,
     ]],
     'mode' => 'payment',
-    'success_url' => $theme_url . '/shop-landing.html?success=true&session_id={CHECKOUT_SESSION_ID}',
-    'cancel_url' => $theme_url . '/shop-landing.html?canceled=true',
+    'success_url' => $site_url . '/shop-landing.html?success=true&session_id={CHECKOUT_SESSION_ID}',
+    'cancel_url' => $site_url . '/shop-landing.html?canceled=true',
     'billing_address_collection' => 'required',
     'shipping_address_collection' => [
         'allowed_countries' => ['FR', 'BE', 'CH', 'CA', 'LU', 'MC'],

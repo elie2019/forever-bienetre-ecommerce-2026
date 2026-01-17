@@ -1447,9 +1447,9 @@
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
             </div>
-            <h3 class="modal-title">Merci !</h3>
-            <p class="modal-text">Votre commande a ete traitee avec succes. Vous recevrez un email de confirmation.</p>
-            <button class="modal-btn" onclick="closeModal()">Continuer</button>
+            <h3 class="modal-title">Commande confirmée !</h3>
+            <p class="modal-text">Merci pour votre achat ! Votre commande a été traitée avec succès.<br><br>Vous recevrez un email de confirmation avec les détails de livraison.</p>
+            <button class="modal-btn" onclick="closeModal()">Continuer mes achats</button>
         </div>
     </div>
 
@@ -1752,11 +1752,15 @@
         // ==================== URL PARAMS (Stripe Return) ====================
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('success') === 'true') {
+            // Vider le panier après achat réussi
+            cart = [];
+            saveCart();
+            updateCartUI();
             showSuccessModal();
             window.history.replaceState({}, document.title, window.location.pathname);
         }
         if (urlParams.get('canceled') === 'true') {
-            showToast('Paiement annule');
+            showToast('Paiement annulé - Votre panier a été conservé');
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
