@@ -146,31 +146,31 @@ $fallback_products = array(
                             </svg>
                         </button>
                         <div class="fittrack-submenu">
-                            <a href="#fittrack-pricing">
+                            <a href="<?php echo esc_url(home_url('/fittrack-pricing/')); ?>">
                                 <span>📋</span>
                                 <span>Pricing & Plans</span>
                             </a>
-                            <a href="#fittrack-dashboard">
+                            <a href="<?php echo esc_url(home_url('/fittrack-dashboard/')); ?>">
                                 <span>📊</span>
                                 <span>Dashboard</span>
                             </a>
-                            <a href="#fittrack-nutrition">
+                            <a href="<?php echo esc_url(home_url('/fittrack-nutrition/')); ?>">
                                 <span>🥗</span>
                                 <span>Nutrition Tracker</span>
                             </a>
-                            <a href="#fittrack-workouts">
+                            <a href="<?php echo esc_url(home_url('/fittrack-workouts/')); ?>">
                                 <span>🏋️</span>
                                 <span>Workout Logger</span>
                             </a>
-                            <a href="#fittrack-progress">
+                            <a href="<?php echo esc_url(home_url('/fittrack-progress/')); ?>">
                                 <span>📈</span>
                                 <span>Progress Tracking</span>
                             </a>
-                            <a href="#fittrack-goals">
+                            <a href="<?php echo esc_url(home_url('/fittrack-goals/')); ?>">
                                 <span>🎯</span>
                                 <span>Goals Manager</span>
                             </a>
-                            <a href="#fittrack-settings">
+                            <a href="<?php echo esc_url(home_url('/fittrack-settings/')); ?>">
                                 <span>⚙️</span>
                                 <span>Settings</span>
                             </a>
@@ -179,6 +179,19 @@ $fallback_products = array(
                     <li><a href="#features">Nos Engagements</a></li>
                     <li><a href="#newsletter">Contact</a></li>
                 </ul>
+
+                <?php if (!is_user_logged_in()) : ?>
+                <button class="auth-btn login-btn" id="openLoginModal" style="padding: 8px 16px; background: transparent; border: 1px solid #c9a962; color: #c9a962; border-radius: 6px; margin-right: 10px; cursor: pointer; transition: all 0.3s;">
+                    Se connecter
+                </button>
+                <button class="auth-btn register-btn" id="openRegisterModal" style="padding: 8px 16px; background: #c9a962; border: none; color: #1a1a2e; border-radius: 6px; margin-right: 10px; cursor: pointer; transition: all 0.3s; font-weight: 600;">
+                    S'inscrire
+                </button>
+                <?php else : ?>
+                <a href="<?php echo esc_url(home_url('/fittrack-dashboard/')); ?>" style="padding: 8px 16px; background: #c9a962; border: none; color: #1a1a2e; border-radius: 6px; margin-right: 10px; text-decoration: none; font-weight: 600; display: inline-block;">
+                    Mon Dashboard
+                </a>
+                <?php endif; ?>
 
                 <button class="cart-btn" id="cartBtn">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,13 +230,13 @@ $fallback_products = array(
                     </svg>
                 </button>
                 <div class="fittrack-submenu">
-                    <a href="#fittrack-pricing"><span>📋</span><span>Pricing & Plans</span></a>
-                    <a href="#fittrack-dashboard"><span>📊</span><span>Dashboard</span></a>
-                    <a href="#fittrack-nutrition"><span>🥗</span><span>Nutrition Tracker</span></a>
-                    <a href="#fittrack-workouts"><span>🏋️</span><span>Workout Logger</span></a>
-                    <a href="#fittrack-progress"><span>📈</span><span>Progress Tracking</span></a>
-                    <a href="#fittrack-goals"><span>🎯</span><span>Goals Manager</span></a>
-                    <a href="#fittrack-settings"><span>⚙️</span><span>Settings</span></a>
+                    <a href="<?php echo esc_url(home_url('/fittrack-pricing/')); ?>"><span>📋</span><span>Pricing & Plans</span></a>
+                    <a href="<?php echo esc_url(home_url('/fittrack-dashboard/')); ?>"><span>📊</span><span>Dashboard</span></a>
+                    <a href="<?php echo esc_url(home_url('/fittrack-nutrition/')); ?>"><span>🥗</span><span>Nutrition Tracker</span></a>
+                    <a href="<?php echo esc_url(home_url('/fittrack-workouts/')); ?>"><span>🏋️</span><span>Workout Logger</span></a>
+                    <a href="<?php echo esc_url(home_url('/fittrack-progress/')); ?>"><span>📈</span><span>Progress Tracking</span></a>
+                    <a href="<?php echo esc_url(home_url('/fittrack-goals/')); ?>"><span>🎯</span><span>Goals Manager</span></a>
+                    <a href="<?php echo esc_url(home_url('/fittrack-settings/')); ?>"><span>⚙️</span><span>Settings</span></a>
                 </div>
             </li>
             <li><a href="#features">Nos Engagements</a></li>
@@ -487,6 +500,419 @@ $fallback_products = array(
         </svg>
         <span id="toastMessage">Produit ajouté au panier !</span>
     </div>
+
+    <!-- Login Modal -->
+    <div class="auth-modal-overlay" id="loginModal" style="display: none;">
+        <div class="auth-modal-content" style="max-width: 450px; background: white; padding: 40px; border-radius: 12px; position: relative;">
+            <button class="modal-close-btn" onclick="closeLoginModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 28px; cursor: pointer; color: #999;">&times;</button>
+
+            <h2 style="font-size: 28px; color: #1a1a2e; margin-bottom: 10px; font-family: 'Playfair Display', serif;">Connexion</h2>
+            <p style="color: #666; margin-bottom: 30px;">Accédez à votre compte FitTrack Pro</p>
+
+            <!-- Messages -->
+            <div id="login-modal-messages"></div>
+
+            <!-- Google Sign In -->
+            <div style="margin-bottom: 25px;">
+                <div id="g_id_onload_modal"
+                     data-client_id="<?php echo esc_attr(get_option('fittrack_google_client_id', '')); ?>"
+                     data-callback="handleGoogleLoginModal"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-shape="rectangular"
+                     data-theme="outline"
+                     data-text="signin_with"
+                     data-size="large"
+                     data-width="100%">
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div style="position: relative; text-align: center; margin: 25px 0;">
+                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e0e0e0;"></div>
+                <span style="position: relative; background: white; padding: 0 15px; color: #999; font-size: 14px;">OU</span>
+            </div>
+
+            <!-- Classic Login Form -->
+            <form id="login-modal-form" onsubmit="handleLoginModalSubmit(event)">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Email</label>
+                    <input type="email" id="login-modal-email" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px;" placeholder="votre@email.com" required>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Mot de Passe</label>
+                    <input type="password" id="login-modal-password" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px;" placeholder="••••••••" required>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;">
+                        <input type="checkbox" id="login-modal-remember" style="width: 18px; height: 18px;">
+                        <span>Se souvenir de moi</span>
+                    </label>
+                    <a href="<?php echo wp_lostpassword_url(); ?>" style="color: #c9a962; text-decoration: none; font-size: 14px;">Mot de passe oublié?</a>
+                </div>
+
+                <button type="submit" id="login-modal-btn" style="width: 100%; padding: 14px; background: #c9a962; color: #1a1a2e; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <span id="login-modal-btn-text">Se Connecter</span>
+                    <span id="login-modal-btn-loader" style="display: none;">Connexion...</span>
+                </button>
+            </form>
+
+            <div style="margin-top: 25px; text-align: center; padding-top: 25px; border-top: 1px solid #e0e0e0;">
+                <span style="color: #666; font-size: 14px;">Pas encore de compte?</span>
+                <a href="#" onclick="switchToRegisterModal(); return false;" style="color: #c9a962; font-weight: 600; text-decoration: none; margin-left: 5px;">
+                    S'inscrire →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="auth-modal-overlay" id="registerModal" style="display: none;">
+        <div class="auth-modal-content" style="max-width: 500px; background: white; padding: 40px; border-radius: 12px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button class="modal-close-btn" onclick="closeRegisterModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 28px; cursor: pointer; color: #999;">&times;</button>
+
+            <h2 style="font-size: 28px; color: #1a1a2e; margin-bottom: 10px; font-family: 'Playfair Display', serif;">Créer un compte</h2>
+            <p style="color: #666; margin-bottom: 30px;">Commencez votre transformation avec FitTrack Pro</p>
+
+            <!-- Messages -->
+            <div id="register-modal-messages"></div>
+
+            <!-- Google Sign Up -->
+            <div style="margin-bottom: 25px;">
+                <div id="g_id_onload_register_modal"
+                     data-client_id="<?php echo esc_attr(get_option('fittrack_google_client_id', '')); ?>"
+                     data-callback="handleGoogleRegisterModal"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-shape="rectangular"
+                     data-theme="outline"
+                     data-text="signup_with"
+                     data-size="large"
+                     data-width="100%">
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div style="position: relative; text-align: center; margin: 25px 0;">
+                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e0e0e0;"></div>
+                <span style="position: relative; background: white; padding: 0 15px; color: #999; font-size: 14px;">OU</span>
+            </div>
+
+            <!-- Classic Register Form -->
+            <form id="register-modal-form" onsubmit="handleRegisterModalSubmit(event)">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Nom Complet *</label>
+                    <input type="text" id="register-modal-name" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px;" placeholder="Votre nom" required>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Email *</label>
+                    <input type="email" id="register-modal-email" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px;" placeholder="votre@email.com" required>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Mot de Passe *</label>
+                    <input type="password" id="register-modal-password" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px;" placeholder="Minimum 8 caractères" required minlength="8">
+                    <div style="margin-top: 6px; font-size: 13px; color: #666;">Le mot de passe doit contenir au moins 8 caractères</div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">Confirmer le Mot de Passe *</label>
+                    <input type="password" id="register-modal-password-confirm" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px;" placeholder="Répétez le mot de passe" required minlength="8">
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <label style="display: flex; align-items: start; gap: 10px; font-size: 14px; cursor: pointer;">
+                        <input type="checkbox" id="register-modal-terms" required style="width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0;">
+                        <span style="color: #666;">
+                            J'accepte les <a href="<?php echo home_url('/mentions-legales'); ?>" target="_blank" style="color: #c9a962; text-decoration: none;">Conditions d'Utilisation</a> et la <a href="<?php echo home_url('/politique-confidentialite'); ?>" target="_blank" style="color: #c9a962; text-decoration: none;">Politique de Confidentialité</a>
+                        </span>
+                    </label>
+                </div>
+
+                <button type="submit" id="register-modal-btn" style="width: 100%; padding: 14px; background: #c9a962; color: #1a1a2e; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <span id="register-modal-btn-text">Créer mon compte</span>
+                    <span id="register-modal-btn-loader" style="display: none;">Création...</span>
+                </button>
+            </form>
+
+            <div style="margin-top: 25px; text-align: center; padding-top: 25px; border-top: 1px solid #e0e0e0;">
+                <span style="color: #666; font-size: 14px;">Vous avez déjà un compte?</span>
+                <a href="#" onclick="switchToLoginModal(); return false;" style="color: #c9a962; font-weight: 600; text-decoration: none; margin-left: 5px;">
+                    Se connecter →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .auth-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        backdrop-filter: blur(5px);
+    }
+    .auth-modal-content {
+        animation: modalSlideIn 0.3s ease-out;
+    }
+    @keyframes modalSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    </style>
+
+    <script>
+    // Google OAuth SDK
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    // Modal Controls
+    function openLoginModal() {
+        document.getElementById('loginModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLoginModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    function openRegisterModal() {
+        document.getElementById('registerModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeRegisterModal() {
+        document.getElementById('registerModal').style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    function switchToRegisterModal() {
+        closeLoginModal();
+        openRegisterModal();
+    }
+
+    function switchToLoginModal() {
+        closeRegisterModal();
+        openLoginModal();
+    }
+
+    // Event Listeners
+    document.getElementById('openLoginModal')?.addEventListener('click', openLoginModal);
+    document.getElementById('openRegisterModal')?.addEventListener('click', openRegisterModal);
+
+    // Close on overlay click
+    document.getElementById('loginModal')?.addEventListener('click', function(e) {
+        if (e.target === this) closeLoginModal();
+    });
+    document.getElementById('registerModal')?.addEventListener('click', function(e) {
+        if (e.target === this) closeRegisterModal();
+    });
+
+    // Show Message Function
+    function showAuthMessage(containerId, type, message) {
+        const container = document.getElementById(containerId);
+        const colors = {
+            success: { bg: '#d4edda', border: '#28a745', text: '#155724' },
+            error: { bg: '#f8d7da', border: '#dc3545', text: '#721c24' },
+            info: { bg: '#d1ecf1', border: '#17a2b8', text: '#0c5460' }
+        };
+        const color = colors[type] || colors.info;
+        container.innerHTML = `
+            <div style="padding: 12px; background: ${color.bg}; border-left: 4px solid ${color.border}; color: ${color.text}; border-radius: 6px; margin-bottom: 20px; font-size: 14px;">
+                ${message}
+            </div>
+        `;
+    }
+
+    // Classic Login Handler
+    function handleLoginModalSubmit(event) {
+        event.preventDefault();
+
+        const email = document.getElementById('login-modal-email').value;
+        const password = document.getElementById('login-modal-password').value;
+        const remember = document.getElementById('login-modal-remember').checked;
+
+        const btn = document.getElementById('login-modal-btn');
+        const btnText = document.getElementById('login-modal-btn-text');
+        const btnLoader = document.getElementById('login-modal-btn-loader');
+
+        btn.disabled = true;
+        btnText.style.display = 'none';
+        btnLoader.style.display = 'inline';
+
+        fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'fittrack_classic_login',
+                nonce: '<?php echo wp_create_nonce('fittrack_login_nonce'); ?>',
+                email: email,
+                password: password,
+                remember: remember ? '1' : '0'
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showAuthMessage('login-modal-messages', 'success', 'Connexion réussie! Redirection...');
+                setTimeout(() => {
+                    window.location.href = '<?php echo home_url('/fittrack-dashboard/'); ?>';
+                }, 1000);
+            } else {
+                showAuthMessage('login-modal-messages', 'error', data.data.message || 'Erreur de connexion');
+                btn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            showAuthMessage('login-modal-messages', 'error', 'Une erreur est survenue');
+            btn.disabled = false;
+            btnText.style.display = 'inline';
+            btnLoader.style.display = 'none';
+        });
+    }
+
+    // Classic Register Handler
+    function handleRegisterModalSubmit(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('register-modal-name').value;
+        const email = document.getElementById('register-modal-email').value;
+        const password = document.getElementById('register-modal-password').value;
+        const passwordConfirm = document.getElementById('register-modal-password-confirm').value;
+        const acceptTerms = document.getElementById('register-modal-terms').checked;
+
+        if (password !== passwordConfirm) {
+            showAuthMessage('register-modal-messages', 'error', 'Les mots de passe ne correspondent pas');
+            return;
+        }
+
+        if (password.length < 8) {
+            showAuthMessage('register-modal-messages', 'error', 'Le mot de passe doit contenir au moins 8 caractères');
+            return;
+        }
+
+        if (!acceptTerms) {
+            showAuthMessage('register-modal-messages', 'error', 'Vous devez accepter les conditions');
+            return;
+        }
+
+        const btn = document.getElementById('register-modal-btn');
+        const btnText = document.getElementById('register-modal-btn-text');
+        const btnLoader = document.getElementById('register-modal-btn-loader');
+
+        btn.disabled = true;
+        btnText.style.display = 'none';
+        btnLoader.style.display = 'inline';
+
+        fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'fittrack_classic_register',
+                nonce: '<?php echo wp_create_nonce('fittrack_register_nonce'); ?>',
+                name: name,
+                email: email,
+                password: password
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showAuthMessage('register-modal-messages', 'success', 'Compte créé avec succès! Redirection...');
+                setTimeout(() => {
+                    window.location.href = '<?php echo home_url('/fittrack-dashboard/'); ?>';
+                }, 1500);
+            } else {
+                showAuthMessage('register-modal-messages', 'error', data.data.message || 'Erreur lors de la création du compte');
+                btn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            showAuthMessage('register-modal-messages', 'error', 'Une erreur est survenue');
+            btn.disabled = false;
+            btnText.style.display = 'inline';
+            btnLoader.style.display = 'none';
+        });
+    }
+
+    // Google OAuth Handlers
+    function handleGoogleLoginModal(response) {
+        showAuthMessage('login-modal-messages', 'info', 'Connexion Google en cours...');
+
+        fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'fittrack_google_login',
+                nonce: '<?php echo wp_create_nonce('fittrack_login_nonce'); ?>',
+                credential: response.credential
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showAuthMessage('login-modal-messages', 'success', 'Connexion Google réussie!');
+                setTimeout(() => {
+                    window.location.href = '<?php echo home_url('/fittrack-dashboard/'); ?>';
+                }, 1000);
+            } else {
+                showAuthMessage('login-modal-messages', 'error', data.data.message || 'Erreur Google');
+            }
+        });
+    }
+
+    function handleGoogleRegisterModal(response) {
+        showAuthMessage('register-modal-messages', 'info', 'Création du compte Google en cours...');
+
+        fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'fittrack_google_register',
+                nonce: '<?php echo wp_create_nonce('fittrack_register_nonce'); ?>',
+                credential: response.credential
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showAuthMessage('register-modal-messages', 'success', 'Compte créé avec succès!');
+                setTimeout(() => {
+                    window.location.href = '<?php echo home_url('/fittrack-dashboard/'); ?>';
+                }, 1500);
+            } else {
+                showAuthMessage('register-modal-messages', 'error', data.data.message || 'Erreur Google');
+            }
+        });
+    }
+    </script>
 
     <?php wp_footer(); ?>
 </body>
